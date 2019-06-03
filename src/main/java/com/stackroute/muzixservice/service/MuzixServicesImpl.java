@@ -5,13 +5,18 @@ import com.stackroute.muzixservice.exception.MuzixAlreadyExistsException;
 import com.stackroute.muzixservice.exception.TrackNotFoundException;
 import com.stackroute.muzixservice.repository.MuzixRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Primary
 public class MuzixServicesImpl implements com.stackroute.muzixservice.service.MuzixServices {
+    //@Autowired
     private MuzixRepository muzixRepository;
+
     @Autowired
     public MuzixServicesImpl(MuzixRepository muzixRepository) {
         this.muzixRepository = muzixRepository;
