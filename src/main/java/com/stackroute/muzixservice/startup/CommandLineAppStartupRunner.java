@@ -5,24 +5,33 @@ import com.stackroute.muzixservice.repository.MuzixRepository;
 import com.stackroute.muzixservice.service.MuzixServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
 @Component
+@PropertySource("classpath:application.properties")
 public class CommandLineAppStartupRunner implements CommandLineRunner {
     private static  final Logger logger=LoggerFactory.getLogger(CommandLineAppStartupRunner.class);
-    private MuzixServices muzixServices;
+    private MuzixRepository muzixRepository;
 
-    public CommandLineAppStartupRunner(MuzixServices muzixServices) {
-        this.muzixServices = muzixServices;
+    @Autowired
+    private Environment environment;
+
+    public CommandLineAppStartupRunner(MuzixRepository muzixRepository) {
+        this.muzixRepository = muzixRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
         logger.info("Application started with command line argument", Arrays.toString(args));
-        Muzix muzix=new Muzix(1,"Kalank","Kalank Track");
-        muzixServices.saveMuzixs(muzix);
+        Muzix muzix=new Muzix(Integer.parseInt(environment.getProperty("spring.muzix.trackId2")),environment.getProperty("spring.muzix.trackName2")
+                ,environment.getProperty("spring.muzix.comments2"));
+        muzixRepository.save(muzix);
     }
 }
