@@ -5,7 +5,6 @@ import com.stackroute.muzixservice.exception.MuzixAlreadyExistsException;
 import com.stackroute.muzixservice.exception.TrackNotFoundException;
 import com.stackroute.muzixservice.repository.MuzixRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,6 @@ import java.util.List;
 @Service
 @Primary
 public class MuzixServicesImpl implements com.stackroute.muzixservice.service.MuzixServices {
-    //@Autowired
     private MuzixRepository muzixRepository;
 
     @Autowired
@@ -76,7 +74,7 @@ public class MuzixServicesImpl implements com.stackroute.muzixservice.service.Mu
         }
         return null;
     }
-
+    @Override
     public Muzix updateMuzixById(int trackId, Muzix muzix) throws  TrackNotFoundException{
         if(muzixRepository.existsById(trackId)) {
             muzix.setComments(muzix.getComments());

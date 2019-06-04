@@ -26,7 +26,7 @@ public class MuzixController {
     }
 
     @PostMapping("Muzix")
-    public ResponseEntity<?> saveUser(@RequestBody Muzix muzix) throws MuzixAlreadyExistsException
+    public ResponseEntity<?> saveMuzix(@RequestBody Muzix muzix) throws MuzixAlreadyExistsException
     {
         ResponseEntity responseEntity;
         muzixServices.saveMuzixs(muzix);
@@ -87,7 +87,7 @@ public class MuzixController {
         return  responseEntity;
     }
     @RequestMapping(method=RequestMethod.PUT, value="MuzixUpdate/{trackId}")
-    public ResponseEntity<?> updateMuzixById(@PathVariable int trackId,@RequestBody Muzix muzix) throws  TrackNotFoundException
+    public ResponseEntity<?> updateMuzixById(@PathVariable("trackId") int trackId,@RequestBody Muzix muzix) throws  TrackNotFoundException
     {
         ResponseEntity responseEntity;
         muzixServices.updateMuzixById(trackId, muzix);
