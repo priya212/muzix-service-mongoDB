@@ -33,14 +33,12 @@ public class MuzixServicesImpl implements com.stackroute.muzixservice.service.Mu
     @Override
     @CacheEvict(allEntries = true)
     public Muzix saveMuzixs(Muzix muzix) throws MuzixAlreadyExistsException {
-      if(muzixRepository.existsById(muzix.getTrackId()))
-      {
-          throw new MuzixAlreadyExistsException("Muzix already exists");
+      if(muzixRepository.existsById(muzix.getTrackId())) {
+          throw new MuzixAlreadyExistsException("${spring.muzix.alreadyExistException}");
       }
       Muzix savedMuzix=muzixRepository.save(muzix);
-      if(savedMuzix == null)
-      {
-          throw new MuzixAlreadyExistsException("Muzix already exists");
+      if(savedMuzix == null) {
+          throw new MuzixAlreadyExistsException("${spring.muzix.alreadyExistException}");
       }
         return savedMuzix;
     }
@@ -66,8 +64,7 @@ public class MuzixServicesImpl implements com.stackroute.muzixservice.service.Mu
     @Override
     public Muzix findById(int trackId) throws TrackNotFoundException {
         Muzix muzix =null;
-        if(muzixRepository.existsById(trackId))
-        {
+        if(muzixRepository.existsById(trackId)) {
             muzix=muzixRepository.findById(trackId).get();
         }
         return muzix;
@@ -78,7 +75,7 @@ public class MuzixServicesImpl implements com.stackroute.muzixservice.service.Mu
         Muzix muzix=null;
         muzix=muzixRepository.findByName(trackName);
         if(muzix == null){
-            throw new TrackNotFoundException("${spring.muzix.trackException}");
+            throw new TrackNotFoundException(environment.getProperty("spring.muzix.trackException"));
         }
         return muzix;
     }
@@ -88,12 +85,11 @@ public class MuzixServicesImpl implements com.stackroute.muzixservice.service.Mu
     @CacheEvict(allEntries = true)
     public List<Muzix> deleteById(int trackId) throws TrackNotFoundException {
        Optional optional=muzixRepository.findById(trackId);
-       if(optional.isPresent())
-       {
+       if(optional.isPresent()) {
            muzixRepository.deleteById(trackId);
        }
        else {
-           throw  new TrackNotFoundException("Track not found");
+           throw new TrackNotFoundException(environment.getProperty("spring.muzix.trackException"));
        }
        return  muzixRepository.findAll();
     }
@@ -106,11 +102,9 @@ public class MuzixServicesImpl implements com.stackroute.muzixservice.service.Mu
             muzix.setComments(muzix1.getComments());
             muzix=muzixRepository.save(muzix);
         }
-        else
-        {
-            throw new TrackNotFoundException("Track not found");
+        else {
+            throw new TrackNotFoundException(environment.getProperty("spring.muzix.trackException"));
         }
-
         return  muzix;
     }
 }
