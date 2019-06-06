@@ -29,9 +29,11 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        logger.info("Application started with command line argument", Arrays.toString(args));
-        Muzix muzix=new Muzix(Integer.parseInt(environment.getProperty("spring.muzix.trackId2")),environment.getProperty("spring.muzix.trackName2")
-                ,environment.getProperty("spring.muzix.comments2"));
+       Muzix muzix=Muzix.builder()
+               .trackId(Integer.parseInt(environment.getProperty("spring.muzix.trackId2")))
+               .trackName(environment.getProperty("spring.muzix.trackName2"))
+               .comments(environment.getProperty("spring.muzix.comments2"))
+               .build();
         muzixRepository.save(muzix);
     }
 }

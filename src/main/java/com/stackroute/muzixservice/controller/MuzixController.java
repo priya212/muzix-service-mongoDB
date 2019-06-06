@@ -8,11 +8,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -21,11 +21,14 @@ import java.util.List;
 public class MuzixController {
     private MuzixServices muzixServices;
 
+    @Autowired
     public MuzixController(MuzixServices muzixServices) {
         this.muzixServices = muzixServices;
     }
 
-    @PostMapping("Muzix")
+    @PostMapping("muzix")
+    @ApiOperation("Save muzix tracks")
+    @ApiResponses(value = {@ApiResponse(code = 200 ,message = "ok",response = Muzix.class)})
     public ResponseEntity<?> saveMuzix(@RequestBody Muzix muzix) throws MuzixAlreadyExistsException
     {
         ResponseEntity responseEntity;
@@ -34,7 +37,7 @@ public class MuzixController {
         return  responseEntity;
     }
 
-    @GetMapping("Muzix")
+    @GetMapping("muzixs")
     @ApiOperation("Get all Muzix tracks")
     @ApiResponses(value = {@ApiResponse(code = 200 ,message = "ok",response = Muzix.class)})
     public ResponseEntity<?> getAllMuzixs()
@@ -43,30 +46,23 @@ public class MuzixController {
     }
 
 
-    @GetMapping("MuzixTrackById/{trackId}")
+    @GetMapping("muzixById/{trackId}")
     @ApiOperation("Get all Muzix tracks with specific trackId")
     @ApiResponses(value = {@ApiResponse(code = 200 ,message = "ok",response = Muzix.class)})
     public ResponseEntity<?> findById(@PathVariable("trackId") int trackId) throws TrackNotFoundException
     {
         ResponseEntity responseEntity;
-       // try {
             Muzix muzix=muzixServices.findById(trackId);
             if(muzix == null){
-                //responseEntity=new ResponseEntity<String>("Track Not found",HttpStatus.OK);
                 throw new TrackNotFoundException("Track not found");
             }
             else {
                 responseEntity = new ResponseEntity<String>("Track found", HttpStatus.OK);
             }
-        /*}
-        catch(TrackNotFoundException ex)
-        {
-            responseEntity=new ResponseEntity<String>(ex.getMessage(),HttpStatus.CONFLICT);
-        }*/
         return  responseEntity;
     }
 
-    @GetMapping("MuzixTrackByName/{trackName}")
+    @GetMapping("muzixByName/{trackName}")
     @ApiOperation("Get all Muzix tracks with specific trackName")
     @ApiResponses(value = {@ApiResponse(code = 200 ,message = "ok",response = Muzix.class)})
     public ResponseEntity<?> findByName(@PathVariable("trackName") String trackName) throws TrackNotFoundException{
@@ -78,21 +74,26 @@ public class MuzixController {
         return responseEntity;
     }
 
-    @DeleteMapping("MuzixDelete/{trackId}")
+    @DeleteMapping("muzix/{trackId}")
+    @ApiOperation("Delete muzix")
+    @ApiResponses(value = {@ApiResponse(code = 200 ,message = "ok",response = Muzix.class)})
     public ResponseEntity<?> deleteById(@PathVariable("trackId") int trackId) throws TrackNotFoundException
     {
         ResponseEntity responseEntity;
         muzixServices.deleteById(trackId);
-        responseEntity=new ResponseEntity<String>("Track Deleted",HttpStatus.OK);
-        return  responseEntity;
-    }
-    @RequestMapping(method=RequestMethod.PUT, value="MuzixUpdate/{trackId}")
-    public ResponseEntity<?> updateMuzixById(@PathVariable("trackId") int trackId,@RequestBody Muzix muzix) throws  TrackNotFoundException
-    {
-        ResponseEntity responseEntity;
-        muzixServices.updateMuzixById(trackId, muzix);
-        responseEntity=new ResponseEntity<String>("Track Updated",HttpStatus.OK);
+        responseEntity=new ResponseEntity<List<Muzix>>(muzixServices.deleteById(trackId),HttpStatus.OK);
         return  responseEntity;
     }
 
+
+    @RequestMapping(method=RequestMethod.PUT, value="muzix/{trackId}")
+    @ApiOperation("Update Muzix tracks")
+    @ApiResponses(value = {@ApiResponse(code = 200 ,message = "ok",response = Muzix.class)})
+    public ResponseEntity<?> updateMuzixById(@RequestBody Muzix muzix) throws  TrackNotFoundException
+    {
+        ResponseEntity responseEntity;
+        muzixServices.updateMuzix( muzix);
+        responseEntity=new ResponseEntity<String>("Track Updated",HttpStatus.OK);
+        return  responseEntity;
+    }
 }

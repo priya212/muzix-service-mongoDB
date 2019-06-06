@@ -11,6 +11,6 @@ public interface MuzixServices {
     public List<Muzix> getAllMuzixs();
     public Muzix findById(int trackId) throws TrackNotFoundException;
     public Muzix findByName(String trackName) throws TrackNotFoundException;
-    public Muzix deleteById(int trackId) throws TrackNotFoundException;
-    public Muzix updateMuzixById(int trackId,Muzix muzix) throws TrackNotFoundException;
+    public List<Muzix> deleteById(int trackId) throws TrackNotFoundException;
+    public Muzix updateMuzix(Muzix muzix) throws TrackNotFoundException; // remove trackId
 }

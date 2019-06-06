@@ -5,11 +5,18 @@ import com.stackroute.muzixservice.exception.MuzixAlreadyExistsException;
 import com.stackroute.muzixservice.exception.TrackNotFoundException;
 import com.stackroute.muzixservice.repository.MuzixRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
+@CacheConfig(cacheNames = "muzix")
 @Service
 @Primary
 public class MuzixServicesImpl implements com.stackroute.muzixservice.service.MuzixServices {
@@ -20,23 +27,40 @@ public class MuzixServicesImpl implements com.stackroute.muzixservice.service.Mu
         this.muzixRepository = muzixRepository;
     }
 
+    @Autowired
+    private Environment environment;
+
     @Override
+    @CacheEvict(allEntries = true)
     public Muzix saveMuzixs(Muzix muzix) throws MuzixAlreadyExistsException {
       if(muzixRepository.existsById(muzix.getTrackId()))
       {
           throw new MuzixAlreadyExistsException("Muzix already exists");
       }
       Muzix savedMuzix=muzixRepository.save(muzix);
-      if(savedMuzix==null)
+      if(savedMuzix == null)
       {
           throw new MuzixAlreadyExistsException("Muzix already exists");
       }
         return savedMuzix;
     }
 
+    public void simulateDelay()
+    {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Override
+    @Cacheable("muzix")
     public List<Muzix> getAllMuzixs() {
-        return muzixRepository.findAll();
+        simulateDelay();
+        List<Muzix> muzixList=muzixRepository.findAll();
+        return  muzixList;
     }
 
     @Override
@@ -45,9 +69,6 @@ public class MuzixServicesImpl implements com.stackroute.muzixservice.service.Mu
         if(muzixRepository.existsById(trackId))
         {
             muzix=muzixRepository.findById(trackId).get();
-            if(muzix==null){
-                throw new TrackNotFoundException("Track Not Found");
-            }
         }
         return muzix;
     }
@@ -57,33 +78,39 @@ public class MuzixServicesImpl implements com.stackroute.muzixservice.service.Mu
         Muzix muzix=null;
         muzix=muzixRepository.findByName(trackName);
         if(muzix == null){
-            throw new TrackNotFoundException("Track not found");
+            throw new TrackNotFoundException("${spring.muzix.trackException}");
         }
         return muzix;
     }
 
+
     @Override
-    public Muzix deleteById(int trackId) throws TrackNotFoundException {
-        if(muzixRepository.existsById(trackId))
-        {
-            muzixRepository.deleteById(trackId);
-        }
-        else
-        {
-            throw new TrackNotFoundException("Track not found");
-        }
-        return null;
+    @CacheEvict(allEntries = true)
+    public List<Muzix> deleteById(int trackId) throws TrackNotFoundException {
+       Optional optional=muzixRepository.findById(trackId);
+       if(optional.isPresent())
+       {
+           muzixRepository.deleteById(trackId);
+       }
+       else {
+           throw  new TrackNotFoundException("Track not found");
+       }
+       return  muzixRepository.findAll();
     }
+
     @Override
-    public Muzix updateMuzixById(int trackId, Muzix muzix) throws  TrackNotFoundException{
-        if(muzixRepository.existsById(trackId)) {
-            muzix.setComments(muzix.getComments());
+    @CacheEvict(allEntries = true)
+    public Muzix updateMuzix(Muzix muzix1) throws  TrackNotFoundException{
+         Muzix muzix=muzixRepository.getOne(muzix1.getTrackId());
+         if(muzixRepository.existsById(muzix1.getTrackId())){
+            muzix.setComments(muzix1.getComments());
+            muzix=muzixRepository.save(muzix);
         }
         else
         {
             throw new TrackNotFoundException("Track not found");
         }
-        Muzix muzix1=muzixRepository.save(muzix);
-        return  muzix1;
+
+        return  muzix;
     }
 }

@@ -2,7 +2,6 @@ package com.stackroute.muzixservice.startup;
 
 import com.stackroute.muzixservice.domain.Muzix;
 import com.stackroute.muzixservice.repository.MuzixRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.PropertySource;

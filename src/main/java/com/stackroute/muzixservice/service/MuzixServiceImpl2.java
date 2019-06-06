@@ -40,12 +40,12 @@ public class MuzixServiceImpl2 implements MuzixServices {
     }
 
     @Override
-    public Muzix deleteById(int trackId) throws TrackNotFoundException {
+    public List<Muzix> deleteById(int trackId) throws TrackNotFoundException {
         return null;
     }
 
     @Override
-    public Muzix updateMuzixById(int trackId, Muzix muzix) throws TrackNotFoundException {
+    public Muzix updateMuzix(Muzix muzix) throws TrackNotFoundException {
         return null;
     }
 }
