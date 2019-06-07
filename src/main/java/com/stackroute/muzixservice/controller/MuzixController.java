@@ -62,7 +62,7 @@ public class MuzixController {
         return  responseEntity;
     }
 
-    @GetMapping("muzixByName/{trackName}")
+   /* @GetMapping("muzixByName/{trackName}")
     @ApiOperation("Get all Muzix tracks with specific trackName")
     @ApiResponses(value = {@ApiResponse(code = 200 ,message = "ok",response = Muzix.class)})
     public ResponseEntity<?> findByName(@PathVariable("trackName") String trackName) throws TrackNotFoundException{
@@ -72,7 +72,7 @@ public class MuzixController {
                 responseEntity = new ResponseEntity<String>("Track found", HttpStatus.OK);
             }
         return responseEntity;
-    }
+    }*/
 
     @DeleteMapping("muzix/{trackId}")
     @ApiOperation("Delete muzix")
@@ -80,12 +80,11 @@ public class MuzixController {
     public ResponseEntity<?> deleteById(@PathVariable("trackId") int trackId) throws TrackNotFoundException
     {
         ResponseEntity responseEntity;
-        muzixServices.deleteById(trackId);
         responseEntity=new ResponseEntity<List<Muzix>>(muzixServices.deleteById(trackId),HttpStatus.OK);
         return  responseEntity;
     }
 
-
+/*
     @RequestMapping(method=RequestMethod.PUT, value="muzix/{trackId}")
     @ApiOperation("Update Muzix tracks")
     @ApiResponses(value = {@ApiResponse(code = 200 ,message = "ok",response = Muzix.class)})
@@ -95,5 +94,5 @@ public class MuzixController {
         muzixServices.updateMuzix( muzix);
         responseEntity=new ResponseEntity<String>("Track Updated",HttpStatus.OK);
         return  responseEntity;
-    }
+    }*/
 }

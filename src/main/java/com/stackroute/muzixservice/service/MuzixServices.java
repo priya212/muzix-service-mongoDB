@@ -10,7 +10,6 @@ public interface MuzixServices {
     public Muzix saveMuzixs(Muzix muzix) throws MuzixAlreadyExistsException;
     public List<Muzix> getAllMuzixs();
     public Muzix findById(int trackId) throws TrackNotFoundException;
-    public Muzix findByName(String trackName) throws TrackNotFoundException;
     public List<Muzix> deleteById(int trackId) throws TrackNotFoundException;
-    public Muzix updateMuzix(Muzix muzix) throws TrackNotFoundException; // remove trackId
+
 }

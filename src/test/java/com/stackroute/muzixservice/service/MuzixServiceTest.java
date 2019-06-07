@@ -90,7 +90,7 @@ public class MuzixServiceTest {
         List<Muzix> muzixList1 = muzixServices.getAllMuzixs();
         Assert.assertNotEquals(muzixList,muzixList1);
     }
-
+/*
     @Test
     public void findByIdTest() throws TrackNotFoundException
     {
@@ -110,7 +110,7 @@ public class MuzixServiceTest {
         when(muzixRepository.findByName("Teri meri yariyaa")).thenReturn(muzix);
         Muzix muzix2=muzixServices.findByName("Teri meri yariyaa");
         Assert.assertEquals(muzix1,muzix2);
-    }
+    }*/
 
     @Test()
     public void deleteTrackTest() throws TrackNotFoundException {
@@ -127,7 +127,7 @@ public class MuzixServiceTest {
         List<Muzix> muzixList1 = muzixServices.getAllMuzixs();
         Assert.assertNotSame(true,muzixList1.contains(muzix));
     }
-
+/*
     @Test
     public void updateMuzixTest() throws  TrackNotFoundException{
         Muzix muzix1=new Muzix(1,"Teri meri yariyaa","Luka chuppi track");
@@ -146,5 +146,5 @@ public class MuzixServiceTest {
         when(muzixRepository.save(any())).thenReturn(muzix);
         Muzix muzix2=muzixServices.updateMuzix(muzix1);
         Assert.assertNotSame(muzix1,muzix2);
-    }
+    }*/
 }

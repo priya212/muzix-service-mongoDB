@@ -35,17 +35,8 @@ public class MuzixServiceImpl2 implements MuzixServices {
     }
 
     @Override
-    public Muzix findByName(String trackName) throws TrackNotFoundException {
-        return null;
-    }
-
-    @Override
     public List<Muzix> deleteById(int trackId) throws TrackNotFoundException {
         return null;
     }
 
-    @Override
-    public Muzix updateMuzix(Muzix muzix) throws TrackNotFoundException {
-        return null;
-    }
 }
