@@ -16,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Muzix {
     @Id
-    private int trackId;
-    private String trackName;
+    private int muzixId;
+    private String muzixName;
     private String comments;
 }

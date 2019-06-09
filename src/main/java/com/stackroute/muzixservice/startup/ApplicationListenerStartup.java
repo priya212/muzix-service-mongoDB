@@ -14,13 +14,13 @@ public class ApplicationListenerStartup implements ApplicationListener<ContextRe
 
     private MuzixRepository muzixRepository;
 
-    @Value("${spring.muzix.trackId1}")
-    private int trackId;
+    @Value("${spring.muzix.muzixId1}")
+    private int muzixId;
 
-    @Value("${spring.muzix.trackName1}")
-    private String trackName;
+    @Value("${spring.muzix.muzixName1}")
+    private String muzixName;
 
-    @Value("${spring.muzix.comments2}")
+    @Value("${spring.muzix.comments1}")
     private String comments;
 
     public ApplicationListenerStartup(MuzixRepository muzixRepository) {
@@ -29,7 +29,7 @@ public class ApplicationListenerStartup implements ApplicationListener<ContextRe
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        Muzix muzix=new Muzix(trackId,trackName,comments);
+        Muzix muzix=new Muzix(muzixId,muzixName,comments);
         muzixRepository.save(muzix);
     }
 }

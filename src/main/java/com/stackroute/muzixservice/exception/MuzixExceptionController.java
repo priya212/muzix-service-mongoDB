@@ -1,5 +1,6 @@
 package com.stackroute.muzixservice.exception;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -7,14 +8,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class MuzixExceptionController {
-    @ExceptionHandler(value = TrackNotFoundException.class)
-    public ResponseEntity<Object> exception(TrackNotFoundException exception)
+    @Value("${spring.muzix.muzixException}")
+    private String muzixException;
+
+    @Value("S{spring.muzix.alreadyExistException}")
+    private String muzixAlreadyExist;
+
+    //Handles global exception for muzixNotFound
+    @ExceptionHandler(value = MuzixNotFoundException.class)
+    public ResponseEntity<Object> exception(MuzixNotFoundException exception)
     {
-        return  new ResponseEntity("Track not found", HttpStatus.NOT_FOUND);
+        return  new ResponseEntity(muzixException, HttpStatus.NOT_FOUND);
     }
+    //Handles global exception for muzixAlreadyExist
     @ExceptionHandler(value = MuzixAlreadyExistsException.class)
     public ResponseEntity<Object> exception (MuzixAlreadyExistsException exception)
     {
-        return new ResponseEntity("Muzix already exist",HttpStatus.CONFLICT/*ALREADY_REPORTED*/);
+        return new ResponseEntity(muzixAlreadyExist,HttpStatus.CONFLICT);
     }
 }

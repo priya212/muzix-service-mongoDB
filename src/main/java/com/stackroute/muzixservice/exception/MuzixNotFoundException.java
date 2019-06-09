@@ -1,9 +1,9 @@
 package com.stackroute.muzixservice.exception;
 
-public class TrackNotFoundException extends Exception {
+public class MuzixNotFoundException extends Exception {
     private String message;
 
-    public TrackNotFoundException(String message) {
+    public MuzixNotFoundException(String message) {
         this.message = message;
     }
 }

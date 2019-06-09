@@ -2,14 +2,14 @@ package com.stackroute.muzixservice.service;
 
 import com.stackroute.muzixservice.domain.Muzix;
 import com.stackroute.muzixservice.exception.MuzixAlreadyExistsException;
-import com.stackroute.muzixservice.exception.TrackNotFoundException;
+import com.stackroute.muzixservice.exception.MuzixNotFoundException;
 
 import java.util.List;
 
 public interface MuzixServices {
     public Muzix saveMuzixs(Muzix muzix) throws MuzixAlreadyExistsException;
     public List<Muzix> getAllMuzixs();
-    public Muzix findById(int trackId) throws TrackNotFoundException;
-    public List<Muzix> deleteById(int trackId) throws TrackNotFoundException;
-
+    public Muzix findById(int muzixId) throws MuzixNotFoundException;
+    public Muzix deleteById(int muzixId) throws MuzixNotFoundException;
+    public Muzix updateMuzix(Muzix muzix) throws MuzixNotFoundException;
 }
