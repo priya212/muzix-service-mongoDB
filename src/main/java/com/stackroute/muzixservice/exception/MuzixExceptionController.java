@@ -13,6 +13,8 @@ public class MuzixExceptionController {
 
     @Value("S{spring.muzix.alreadyExistException}")
     private String muzixAlreadyExist;
+    @Value("${spring.muzix.exception}")
+    private  String getAllException;
 
     //Handles global exception for muzixNotFound
     @ExceptionHandler(value = MuzixNotFoundException.class)
@@ -25,5 +27,11 @@ public class MuzixExceptionController {
     public ResponseEntity<Object> exception (MuzixAlreadyExistsException exception)
     {
         return new ResponseEntity(muzixAlreadyExist,HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<Object> exception (Exception exception)
+    {
+        return new ResponseEntity( getAllException,HttpStatus.CONFLICT);
     }
 }

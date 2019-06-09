@@ -6,4 +6,8 @@ public class MuzixNotFoundException extends Exception {
     public MuzixNotFoundException(String message) {
         this.message = message;
     }
+
+    public MuzixNotFoundException() {
+
+    }
 }

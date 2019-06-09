@@ -58,9 +58,13 @@ public class MuzixServicesImpl implements com.stackroute.muzixservice.service.Mu
     //Get all muzixs
     @Override
     @Cacheable("muzix")
-    public List<Muzix> getAllMuzixs(){
+    public List<Muzix> getAllMuzixs() throws  Exception{
         simulateDelay();
         List<Muzix> muzixList=muzixRepository.findAll();
+        if(muzixList.isEmpty())
+        {
+            throw  new Exception("No muzix available");
+        }
         return  muzixList;
     }
 
@@ -94,7 +98,9 @@ public class MuzixServicesImpl implements com.stackroute.muzixservice.service.Mu
     @Override
     @CacheEvict(allEntries = true)
     public Muzix updateMuzix(Muzix muzix) throws MuzixNotFoundException{
-        if(muzixRepository.existsById(muzix.getMuzixId())){
+        Optional optional=muzixRepository.findById(muzix.getMuzixId());
+        if(optional.isPresent()){
+            muzix=muzixRepository.findById(muzix.getMuzixId()).get();
             muzix.setComments(muzix.getComments());
             muzixRepository.save(muzix);
         }

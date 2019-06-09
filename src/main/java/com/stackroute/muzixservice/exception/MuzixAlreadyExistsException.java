@@ -7,4 +7,7 @@ public class MuzixAlreadyExistsException extends Exception {
         this.message = message;
     }
 
+    public MuzixAlreadyExistsException() {
+
+    }
 }
