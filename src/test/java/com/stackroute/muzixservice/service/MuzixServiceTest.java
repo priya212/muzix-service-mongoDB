@@ -68,23 +68,26 @@ public class MuzixServiceTest {
     @Test
     public void findByIdTest() throws MuzixNotFoundException
     {
-        muzixRepository.save(muzix);
+        Muzix muzix=new Muzix(1,"Teri meri yariyaa","Classmates track");
         Muzix muzix1=null;
-        when(muzixRepository.findById(1)).thenReturn(optional);
+        when(muzixRepository.save(muzix)).thenReturn(muzix);
+        when(muzixRepository.existsById(1)).thenReturn(true);
+        when(muzixRepository.findById(muzix.getMuzixId())).thenReturn(optional);
+        muzix1=(Muzix) optional.get();
         Muzix muzix2=muzixServices.findById(1);
         Assert.assertEquals(muzix1,muzix2);
     }
 
- /*   @Test(expected = MuzixNotFoundException.class)
+    @Test(expected = MuzixNotFoundException.class)
     public void findByIdTestFailure() throws MuzixNotFoundException
     {
         muzixRepository.save(muzix);
         Muzix muzix1=null;
-        when(muzixRepository.findById(6)).thenReturn(null);
+        when(muzixRepository.findById(6)).thenReturn(optional);
+        muzix1=(Muzix) optional.get();
         Muzix muzix2=muzixServices.findById(6);
         Assert.assertEquals(muzix1,muzix2);
-    }*/
-
+    }
     @Test
     public void getAllMuzixTest() throws Exception {
         muzixRepository.save(muzix);
@@ -100,41 +103,42 @@ public class MuzixServiceTest {
         //stubbing the mock to return specific data
         when(muzixRepository.findAll()).thenReturn(null);
         List<Muzix> muzixList1 = muzixServices.getAllMuzixs();
-        Assert.assertNotEquals(muzixList,muzixList1);
+        Assert.assertEquals(muzixList,muzixList1);
     }
 
     @Test
     public void deleteTrackTest() throws Exception {
         when(muzixRepository.findById(1)).thenReturn(optional);
         muzixServices.deleteById(muzix.getMuzixId());
-        List<Muzix> muzixList1 = muzixServices.getAllMuzixs();
+        List<Muzix> muzixList1 = muzixRepository.findAll();
         Assert.assertEquals(false,muzixList1.contains(muzix));
     }
-/*
-    *//*@Test(expected = MuzixNotFoundException.class)
-    public void deleteTrackTestFailure() throws MuzixNotFoundException{
-        when(muzixRepository.findById(1)).thenReturn(optional);
-        muzixServices.deleteById(1);
-        List<Muzix> muzixList1 = muzixServices.getAllMuzixs();
-        Assert.assertEquals(false,muzixList1.contains(muzix));
-     *//**//*   doThrow(new MuzixNotFoundException()).when(muzixRepository).deleteById(eq(9));
-       muzixRepository.deleteById(9);*//**//*
 
-    }*/
+    @Test(expected = MuzixNotFoundException.class)
+    public void deleteTrackTestFailure() throws MuzixNotFoundException,Exception{
+        when(muzixRepository.findById(11)).thenReturn(optional);
+        Muzix muzix1= muzixServices.deleteById(muzix.getMuzixId());
+        List<Muzix> muzixList1=muzixServices.getAllMuzixs();
+        Assert.assertEquals(true,muzixList1.contains(muzix1));
+    }
     @Test
     public void updateMuzixTest() throws  MuzixNotFoundException{
         Muzix muzix1=new Muzix(1,"Teri meri yariyaa","Luka chuppi track");
         when(muzixRepository.existsById(1)).thenReturn(true);
+        when(muzixRepository.findById(1)).thenReturn(optional);
         when(muzixRepository.save(any())).thenReturn(muzix);
         Muzix muzix2=muzixServices.updateMuzix(muzix1);
         Assert.assertEquals(muzix1,muzix2);
     }
-   /* @Test(expected = MuzixNotFoundException.class)
-    public void updateMuzixTestFailure() throws  MuzixNotFoundException{
-        Muzix muzix1=new Muzix(5,"Teri meri yariyaa","Luka chuppi track");
-        when(muzixRepository.findById(5)).thenThrow(new MuzixNotFoundException());
-        Muzix muzix2=muzixServices.updateMuzix(muzix1);*//*
-        when(muzixRepository.save(any())).thenReturn(null);
-        Assert.assertSame(muzix1,muzix2);*//*
-    }*/
+
+    @Test(expected = MuzixNotFoundException.class)
+    public void Updatetest() throws MuzixNotFoundException {
+        when(muzixRepository.save(muzix)).thenReturn(muzix);
+        when(muzixRepository.existsById(muzix.getMuzixId())).thenReturn(true);
+        when(muzixRepository.findById(muzix.getMuzixId())).thenReturn(optional);
+        Muzix updateMuzix=new Muzix(10,"sorry sorry","ABCD track");
+        muzix.setComments(updateMuzix.getComments());
+        Muzix actualMuzix=muzixServices.updateMuzix(updateMuzix);
+        Assert.assertNotEquals(updateMuzix,actualMuzix);
+    }
 }
